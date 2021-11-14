@@ -1,0 +1,65 @@
+{% extends 'otree/Base.html' %}
+
+
+{% block internal_styles %}
+    {{ super() }}
+    <style>
+      body {
+        background-color: #3f1f3c;
+        color: #8cff9b;
+      }
+    </style>
+{% endblock %}
+
+{% block content %}
+<p class="otree-wait-page__body">{{ body_text }}</p>
+{% endblock %}
+
+{% block internal_scripts %}
+    {{ super() }}
+    <!-- this is an HTML file rather than JavaScript static file because context variables need to be passed to it -->
+<script type="text/javascript">
+$(document).ready(function () {
+
+    var socket;
+
+    initWebSocket();
+
+    function initWebSocket() {
+        socket = makeReconnectingWebSocket("{{ view.socket_url() }}");
+        socket.onmessage = function(e) {
+            var data = JSON.parse(e.data);
+
+            // Handle errors
+            if (data.error) {
+                // maybe the div's default text doesn't get shown
+                $("#_otree-server-error").text(data.error);
+                $("#_otree-server-error").show();
+                return;
+            }
+
+            window.location.reload();
+
+        };
+    }
+
+    {% if is_defined('view.group_by_arrival_time') and view.group_by_arrival_time %}
+
+        {% comment %}
+        Refresh the whole page. This is documented behavior that enables things like
+        allowing people to proceed if they have been waiting too long.
+        {% endcomment %}
+
+        var SECOND = 1000;
+        window.setInterval(function() {
+                  window.location.reload();
+                }, 60*SECOND);
+
+
+    {% endif %}
+
+
+ });
+ </script>
+ {% endblock %}
+
