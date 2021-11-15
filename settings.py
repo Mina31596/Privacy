@@ -5,8 +5,8 @@ LANGUAGE_CODE = 'en'
 REAL_WORLD_CURRENCY_CODE = 'USD'
 USE_POINTS = True
 DEMO_PAGE_INTRO_HTML = ''
-PARTICIPANT_FIELDS = ['is_dropout']
-SESSION_FIELDS = ['quesstion_bank', 'used_questions', 'invalid_Ids']
+PARTICIPANT_FIELDS = []
+SESSION_FIELDS = ['quesstion_bank', 'used_questions']
 ROOMS = []
 
 ADMIN_USERNAME = 'admin'

@@ -5,7 +5,7 @@ c = cu
 doc = '\na.k.a. Keynesian beauty contest.\nPlayers all guess a number; whoever guesses closest to\n2/3 of the average wins.\nSee https://en.wikipedia.org/wiki/Guess_2/3_of_the_average\n'
 class Constants(BaseConstants):
     name_in_url = 'Privacy_Game'
-    players_per_group = 6
+    players_per_group = 2
     num_rounds = 10
     question_stack = ('Are you attracted to anyone in the game?', 'Have you ever been arrested?', 'Can you imagine pursuing a political career?')
     players_per_grou = 0

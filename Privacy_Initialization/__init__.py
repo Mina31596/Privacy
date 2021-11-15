@@ -5,7 +5,7 @@ c = cu
 doc = ''
 class Constants(BaseConstants):
     name_in_url = 'Privacy_Initialization'
-    players_per_group = 6
+    players_per_group = None
     num_rounds = 1
     questions = ('Are you attracted to anyone in the room?', 'Have you ever been arrested?', 'Can you imagine pursuing a political career?')
 def Update_Player_Ranking(subsession):
@@ -41,18 +41,10 @@ def enterQuestion(player):
     session.quesstion_bank = ["question1","question2","question3","question 4","question 5","question 6","question 7","question8","question9"]
     session.used_questions=[" "]
     session.quesstion_bank.append(player.enter_question)
-def determine_valid_id(player):
-    session = player.session
-    group = player.group
-    participant = player.participant
-    p_host= group.get_player_by_id(1)
-    session = player.session
-    session.invalid_Ids =[]
-    if player.id_InGroup != p_host.host_Id:
-        session.invalid_Ids.append(player.id_in_group)
-    participant.is_dropout= False
+def my_function(player):
+    pass
 class Player(BasePlayer):
-    id_InGroup = models.IntegerField(initial=0)
+    id_InGroup = models.IntegerField()
     name = models.StringField()
     host = models.BooleanField(choices=[[True, 'Yes'], [False, 'No']], initial=False, label=' ')
     host_Id = models.IntegerField()
@@ -76,20 +68,8 @@ class Join_session(Page):
     @staticmethod
     def is_displayed(player):
         return player.host==False
-    @staticmethod
-    def before_next_page(player, timeout_happened):
-        determine_valid_id(player)
-class Invalid_Id(Page):
-    form_model = 'player'
-    form_fields = ['id_InGroup']
-    @staticmethod
-    def is_displayed(player):
-        session = player.session
-        group = player.group
-        check = player.id_in_group in session.invalid_Ids
-        return check
 class WaitPage1(WaitPage):
-    body_text = 'Waiting for all players to join '
+    body_text = 'Waiting for all the players to join'
 class Write_Questions(Page):
     form_model = 'player'
     form_fields = ['enter_question']
@@ -99,4 +79,4 @@ class Write_Questions(Page):
         participant.vars["added_questions"] = player.enter_question
         
         
-page_sequence = [Welcome_Page, Host_Session, Join_session, Invalid_Id, WaitPage1, Write_Questions]
+page_sequence = [Welcome_Page, Host_Session, Join_session, WaitPage1, Write_Questions]
