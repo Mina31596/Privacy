@@ -1,11 +1,12 @@
 
+
 from otree.api import *
 c = cu
 
 doc = '\na.k.a. Keynesian beauty contest.\nPlayers all guess a number; whoever guesses closest to\n2/3 of the average wins.\nSee https://en.wikipedia.org/wiki/Guess_2/3_of_the_average\n'
 class Constants(BaseConstants):
     name_in_url = 'Privacy_Game'
-    players_per_group = 2
+    players_per_group = None
     num_rounds = 10
     question_stack = ('Are you attracted to anyone in the game?', 'Have you ever been arrested?', 'Can you imagine pursuing a political career?')
     players_per_grou = 0
@@ -26,7 +27,7 @@ def display_question(group):
 def calculate_rewards(group):
     answer_yeses_count = 0
     for player in group.get_players():
-        if player.participant.vars["answer"] == True:
+        if player.participant.is_dropout == False and player.participant.vars["answer"] == True:
             answer_yeses_count += 1
     
     
@@ -45,7 +46,8 @@ def consolidate_question_list(group):
     additional_questions = []
     
     for player in group.get_players():
-        additional_questions.append(player.participant.vars["added_questions"])
+        if player.participant.is_dropout == False:
+            additional_questions.append(player.participant.vars["added_questions"])
     
     consolidated_list = list(questions) + additional_questions
     print(consolidated_list)
@@ -92,6 +94,10 @@ class Answer_Question_Page(Page):
     form_model = 'player'
     form_fields = ['answer']
     @staticmethod
+    def is_displayed(player):
+        participant = player.participant
+        return participant.is_dropout==False
+    @staticmethod
     def vars_for_template(player):
         participant = player.participant
         #import random
@@ -125,6 +131,10 @@ class Guess_page(Page):
     form_model = 'player'
     form_fields = ['guess']
     @staticmethod
+    def is_displayed(player):
+        participant = player.participant
+        return participant.is_dropout==False
+    @staticmethod
     def before_next_page(player, timeout_happened):
         participant = player.participant
         participant.vars["guess"] = player.guess
@@ -135,6 +145,10 @@ class Wait_page_3(WaitPage):
     after_all_players_arrive = calculate_rewards
 class Round_results(Page):
     form_model = 'player'
+    @staticmethod
+    def is_displayed(player):
+        participant = player.participant
+        return participant.is_dropout==False
 class Final_results(Page):
     form_model = 'player'
     @staticmethod
