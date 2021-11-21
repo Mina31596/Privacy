@@ -1,0 +1,22 @@
+{{ extends 'global/Page.html' }}
+{{ block title }} Final Ranking {{ endblock }}
+
+{{ block content }}
+
+<p>Place 1: Player  {{ranking_id.0 }}  with {{ranking_points.0 }} points.
+</p>
+<p>Place 2: Player  {{ranking_id.1 }}   with {{ranking_points.1 }} points.
+</p>
+
+{{ if players_per_group > 2 }}
+<p>Place 3: Player  {{ranking_id.2 }}   with {{ranking_points.2 }} points.
+</p>
+
+{{ endif }}
+
+
+{{ formfields }}
+
+{{ next_button }}
+</center>
+{{ endblock }}
